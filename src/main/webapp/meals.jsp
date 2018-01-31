@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib uri="http://example.com/functions" prefix="f" %>
 <html>
 <head>
     <title>Meals</title>
@@ -17,8 +18,8 @@
         <th>Calories</th>
     </tr>
     <c:forEach items="${mealList}" var="meal">
-        <tr>
-            <td>${meal.dateTime}</td>
+        <tr style="${meal.exceed ? 'color: red':'color: green'}">
+            <td>${f:formatLocalDateTime(meal.dateTime, 'dd/MM/yyyy')}</td>
             <td>${meal.calories}</td>
             <td>${meal.calories}</td>
         </tr>
