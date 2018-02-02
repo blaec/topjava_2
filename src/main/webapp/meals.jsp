@@ -18,13 +18,14 @@
         <th>Update</th>
         <th>Delete</th>
     </tr>
+    <jsp:useBean id="mealServlet" scope="request" class="ru.javawebinar.topjava.web.MealServlet"/>
     <c:forEach items="${mealList}" var="meal">
         <tr style="${meal.exceed ? 'color: red':'color: green'}">
             <td>${f:formatLocalDateTime(meal.dateTime, 'dd/MM/yyyy')}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
-            <td><a href="">Update</a> </td>
-            <td><a href="">Delete</a> </td>
+            <td><a href="">Update</a></td>
+            <td><a href="mealServlet?action=delete&id=<c:out value="${meal.id}"/>">Delete</a></td>
         </tr>
     </c:forEach>
 </table>

@@ -8,7 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MealRepositoryImpl implements MealRepository {
-    List<Meal> repository = getMealsList();
+    private List<Meal> repository;
+
+    public MealRepositoryImpl() {
+        this.repository = getMealsList();
+    }
 
     @Override
     public void save(Meal meal) {
@@ -16,13 +20,13 @@ public class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void delete(Meal meal) {
-        repository.remove(meal);
+    public void delete(int id) {
+        repository.remove(getById(id));
     }
 
     @Override
     public void update(Meal newMeal) {
-        delete(getById(newMeal.getId()));
+        delete(newMeal.getId());
         save(newMeal);
     }
 
