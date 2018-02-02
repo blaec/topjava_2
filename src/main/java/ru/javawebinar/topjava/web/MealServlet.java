@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
-import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.MealRepositoryImpl;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import static ru.javawebinar.topjava.repository.MealRepositoryImpl.getMealsList;
+import static ru.javawebinar.topjava.util.MealsUtil.MEAL_LIST;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
@@ -39,8 +38,8 @@ public class MealServlet extends HttpServlet {
             meals = repository.getAll();
         }
 
-        meals = meals.size() != 0 ? meals : getMealsList();
-        List<MealWithExceed> mealsWithExceed = MealsUtil.getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, 2000);
+        meals = meals.size() != 0 ? meals : MEAL_LIST;
+        List<MealWithExceed> mealsWithExceed = MealsUtil.getWithExceeded(meals, 2000);
         request.setAttribute("mealList", mealsWithExceed);
         request.getRequestDispatcher("meals.jsp").forward(request, response);
 //        response.sendRedirect("meals.jsp");
