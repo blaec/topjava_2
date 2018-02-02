@@ -16,16 +16,13 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 
 public class MealsUtil {
-    public static List<Meal> MEAL_LIST = new ArrayList<>();
-
-    static {
-        MEAL_LIST.add(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-        MEAL_LIST.add(new Meal(2, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
-        MEAL_LIST.add(new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
-        MEAL_LIST.add(new Meal(1, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
-        MEAL_LIST.add(new Meal(1, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
-        MEAL_LIST.add(new Meal(1, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
-    }
+    public static final List<Meal> MEAL_LIST = Arrays.asList(
+            new Meal(1, LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
+            new Meal(2, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
+            new Meal(2, LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
+            new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
+            new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
+            new Meal(2, LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
 
     public static void main(String[] args) {
         List<MealWithExceed> mealsWithExceeded = getFilteredWithExceeded(MEAL_LIST, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
