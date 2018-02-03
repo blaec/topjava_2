@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@taglib uri="http://example.com/functions" prefix="f" %>
+<%@ taglib prefix="f" uri="http://example.com/functions" %>
 <html>
 <head>
     <title>Meals</title>
@@ -18,6 +18,7 @@
 <body>
 <h3><a href="index.html">Home</a></h3>
 <h2>Meals</h2>
+<a href="meals?action=create">Add Meal</a>
 
 <table border="1" cellpadding="8" cellspacing="0">
     <tr>
@@ -28,13 +29,13 @@
         <th>Delete</th>
     </tr>
     <c:forEach items="${mealList}" var="meal">
-        <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+        <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealWithExceed"/>
         <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
             <td>${f:formatLocalDateTime(meal.dateTime)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
-            <td><a href="">Update</a></td>
-            <td><a href="meal?action=delete&id=<c:out value="${meal.id}"/>">Delete</a></td>
+            <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
+            <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
