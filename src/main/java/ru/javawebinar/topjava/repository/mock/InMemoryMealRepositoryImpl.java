@@ -17,9 +17,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.MEALS.stream()
-                .filter(m -> m.getUserId() == AuthorizedUser.id())
-                .forEach(this::save);
+        MealsUtil.MEALS.forEach(this::save);
     }
 
     @Override
@@ -27,26 +25,38 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
         }
-        meal.setUserId(AuthorizedUser.id());
+        meal.setUserId(meal.getUserId());
         repository.put(meal.getId(), meal);
         return meal;
     }
 
     @Override
     public void delete(int id) {
-        repository.remove(id);
+        if (isUsersMeal(id)) {
+            repository.remove(id);
+        }
     }
 
     @Override
+    // TODO get-update-delete - следите, чтобы не было NPE (NullPointException может быть, если в хранилище отсутствует юзер или еда).
     public Meal get(int id) {
-        return repository.get(id);
+        if (isUsersMeal(id)) {
+            return repository.get(id);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public Collection<Meal> getAll() {
         return repository.values().stream()
+                .filter(m -> m.getUserId() == AuthorizedUser.id())
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
+    }
+
+    private boolean isUsersMeal(int id) {
+        return repository.get(id).getUserId() == AuthorizedUser.id();
     }
 }
 
