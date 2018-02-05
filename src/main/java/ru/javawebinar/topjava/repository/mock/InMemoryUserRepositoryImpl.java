@@ -26,6 +26,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    //TODO delete попробуйте сделать за одно обращение к map (без containsKey)
     public boolean delete(int id) {
         log.info("delete {}", id);
         repository.remove(id);
@@ -33,6 +34,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    //TODO предусмотрите случай одинаковых User.name (порядок должен быть зафиксированным).
     public User save(User user) {
         log.info("save {}", user);
         if (user.isNew()) {
