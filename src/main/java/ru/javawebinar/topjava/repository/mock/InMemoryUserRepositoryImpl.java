@@ -26,19 +26,26 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    // TODO delete попробуйте сделать за одно обращение к map (без containsKey)
     public boolean delete(int id) {
         log.info("delete {}", id);
         repository.remove(id);
-        return !repository.containsKey(id);
+//        return !repository.containsKey(id);
+        return repository.keySet().stream()
+                .anyMatch(i -> i == id);
     }
 
     @Override
-    // TODO предусмотрите случай одинаковых User.name (порядок должен быть зафиксированным).
     public User save(User user) {
         log.info("save {}", user);
         if (user.isNew()) {
             user.setId(counter.incrementAndGet());
+
+            // Check is user name
+            if (repository.values().stream()
+                    .filter(u -> u.getName().equals(user.getName()))
+                    .collect(Collectors.toList()).size() > 0) {
+                log.info("User with this name {} already exists.", user.getName());
+            }
         }
         repository.put(user.getId(), user);
         return user;
