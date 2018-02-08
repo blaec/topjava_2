@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
+import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
@@ -18,8 +19,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
@@ -39,16 +43,34 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String id = request.getParameter("id");
 
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                LocalDateTime.parse(request.getParameter("dateTime")),
-                request.getParameter("description"),
-                Integer.valueOf(request.getParameter("calories")));
+        if (request.getParameterMap().containsKey("AddMeal")) {
+            String id = request.getParameter("id");
 
-        log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        repository.save(meal);
-        response.sendRedirect("meals");
+            Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
+                    LocalDateTime.parse(request.getParameter("dateTime")),
+                    request.getParameter("description"),
+                    Integer.valueOf(request.getParameter("calories")));
+
+            log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
+            repository.save(meal);
+            response.sendRedirect("meals");
+        } else if (request.getParameterMap().containsKey("FilterMeals")) {
+            String fromDate = request.getParameter("fromDate");
+            String toDate = request.getParameter("toDate");
+            LocalDate ldFrom = Objects.equals(fromDate, "") ? LocalDate.MIN : LocalDate.parse(fromDate);
+            LocalDate ldTo = Objects.equals(toDate, "") ? LocalDate.MAX : LocalDate.parse(toDate);
+
+            String fromTime = request.getParameter("fromTime");
+            String toTime = request.getParameter("toTime");
+            LocalTime ltFrom = Objects.equals(fromTime, "") ? LocalTime.MIN : LocalTime.parse(fromTime);
+            LocalTime ltTo = Objects.equals(toTime, "") ? LocalTime.MAX : LocalTime.parse(toTime);
+
+            List<MealWithExceed> meal = MealsUtil.getFilteredWithExceeded(repository.getAll(), ldFrom, ldTo, ltFrom, ltTo, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+            request.setAttribute("meals", meal);
+            request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        }
+
     }
 
     @Override
