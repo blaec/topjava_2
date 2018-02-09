@@ -9,6 +9,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
@@ -25,6 +26,9 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
+
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseDate;
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseTime;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -48,8 +52,9 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
 
-        if (request.getParameterMap().containsKey("AddMeal")) {
+        if (action == null) {
             Meal meal = new Meal(
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
@@ -63,18 +68,12 @@ public class MealServlet extends HttpServlet {
                 controller.update(meal, getId(request));
             }
             response.sendRedirect("meals");
-        } else if (request.getParameterMap().containsKey("FilterMeals")) {
-            String fromDate = request.getParameter("fromDate");
-            String toDate = request.getParameter("toDate");
-            LocalDate ldFrom = Objects.equals(fromDate, "") ? LocalDate.MIN : LocalDate.parse(fromDate);
-            LocalDate ldTo = Objects.equals(toDate, "") ? LocalDate.MAX : LocalDate.parse(toDate);
+        } else if ("filter".equals(action)) {
+            LocalDate ldFrom = parseDate(request.getParameter("fromDate"));
+            LocalDate ldTo = parseDate(request.getParameter("toDate"));
+            LocalTime ltFrom = parseTime(request.getParameter("fromTime"));
+            LocalTime ltTo = parseTime(request.getParameter("toTime"));
 
-            String fromTime = request.getParameter("fromTime");
-            String toTime = request.getParameter("toTime");
-            LocalTime ltFrom = Objects.equals(fromTime, "") ? LocalTime.MIN : LocalTime.parse(fromTime);
-            LocalTime ltTo = Objects.equals(toTime, "") ? LocalTime.MAX : LocalTime.parse(toTime);
-
-//            List<MealWithExceed> meal = MealsUtil.getFilteredWithExceeded(repository.getAll(), ldFrom, ldTo, ltFrom, ltTo, MealsUtil.DEFAULT_CALORIES_PER_DAY);
             List<MealWithExceed> meal = controller.getBetween(ldFrom, ltFrom, ldTo, ltTo);
             request.setAttribute("meals", meal);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);

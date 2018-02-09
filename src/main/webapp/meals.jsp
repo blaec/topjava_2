@@ -6,50 +6,25 @@
 <html>
 <head>
     <title>Meal list</title>
-    <style>
-        .normal {
-            color: green;
-        }
-
-        .exceeded {
-            color: red;
-        }
-
-        dl {
-            background: none repeat scroll 0 0 #FAFAFA;
-            margin: 8px 0;
-            padding: 0;
-        }
-
-        dt {
-            display: inline-block;
-            width: 50px;
-        }
-
-        dd {
-            display: inline-block;
-            margin-left: 8px;
-            vertical-align: top;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <section>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
     <hr/>
-    <form method="post" action="meals">
+    <form method="post" action="meals?action=filter">
         <dl>
             <dt>From:</dt>
-            <dd><input type="date" name="fromDate"></dd>
-            <dd><input type="time" name="fromTime"></dd>
+            <dd><input type="date" name="fromDate" value="${param.fromDate}"></dd>
+            <dd><input type="time" name="fromTime" value="${param.fromTime}"></dd>
         </dl>
         <dl>
             <dt>To:</dt>
-            <dd><input type="date" name="toDate"></dd>
-            <dd><input type="time" name="toTime"></dd>
+            <dd><input type="date" name="toDate" value="${param.toDate}"></dd>
+            <dd><input type="time" name="toTime" value="${param.toTime}"></dd>
         </dl>
-        <button type="submit" name="FilterMeals">Filter</button>
+        <button type="submit">Filter</button>
     </form>
     <a href="meals?action=create">Add Meal</a>
     <table border="1" cellpadding="8" cellspacing="0">
