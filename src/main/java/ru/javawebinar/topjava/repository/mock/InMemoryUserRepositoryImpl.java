@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.UserUtil;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
+
 
     {
         UserUtil.USERS.forEach(this::save);
@@ -58,7 +60,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
+    public Collection<User> getAll() {
         log.info("getAll");
         return repository.values().stream()
                 .sorted(Comparator.comparing(User::getName))

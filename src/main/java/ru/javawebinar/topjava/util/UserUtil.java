@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UserUtil {
+    public static final int USER_ID = 1;
+    public static final int ADMIN_ID = 2;
+
     public static final List<User> USERS = Arrays.asList(
             new User("user", "user@google.com", "user", Role.ROLE_USER),
             new User("admin", "admin@google.com", "admin", Role.ROLE_ADMIN)

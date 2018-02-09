@@ -29,14 +29,14 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
-//    private MealRepository repository;
-    private MealRestController repository;
+    //    private MealRepository repository;
+    private MealRestController controller;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
-        repository = appCtx.getBean(MealRestController.class);
+        controller = appCtx.getBean(MealRestController.class);
 //        repository = new InMemoryMealRepositoryImpl();
     }
 
@@ -52,8 +52,13 @@ public class MealServlet extends HttpServlet {
                     request.getParameter("description"),
                     Integer.valueOf(request.getParameter("calories")));
 
-            log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-            repository.save(meal);
+            if (meal.isNew()) {
+                log.info("Create {}", meal);
+                controller.save(meal);
+            } else {
+                log.info("Update {}", meal);
+                controller.update(meal, meal.getId());
+            }
             response.sendRedirect("meals");
         } else if (request.getParameterMap().containsKey("FilterMeals")) {
             String fromDate = request.getParameter("fromDate");
@@ -66,7 +71,8 @@ public class MealServlet extends HttpServlet {
             LocalTime ltFrom = Objects.equals(fromTime, "") ? LocalTime.MIN : LocalTime.parse(fromTime);
             LocalTime ltTo = Objects.equals(toTime, "") ? LocalTime.MAX : LocalTime.parse(toTime);
 
-            List<MealWithExceed> meal = MealsUtil.getFilteredWithExceeded(repository.getAll(), ldFrom, ldTo, ltFrom, ltTo, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+//            List<MealWithExceed> meal = MealsUtil.getFilteredWithExceeded(repository.getAll(), ldFrom, ldTo, ltFrom, ltTo, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+            List<MealWithExceed> meal = controller.getBetween(ldFrom, ltFrom, ldTo, ltTo);
             request.setAttribute("meals", meal);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
         }
@@ -81,14 +87,14 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 int id = getId(request);
                 log.info("Delete {}", id);
-                repository.delete(id);
+                controller.delete(id);
                 response.sendRedirect("meals");
                 break;
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        repository.get(getId(request));
+                        controller.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
@@ -96,7 +102,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        MealsUtil.getWithExceeded(repository.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                        MealsUtil.getWithExceeded(controller.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
