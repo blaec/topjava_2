@@ -28,7 +28,7 @@ public class MealRestController {
         this.service = service;
     }
 
-    public Meal save(Meal meal) {
+    public Meal create(Meal meal) {
         int userId = getUserId();
         checkNew(meal);
         log.info("save {} for user {}", meal, userId);
@@ -54,10 +54,10 @@ public class MealRestController {
         return service.get(id, userId);
     }
 
-    public List<Meal> getAll() {
+    public List<MealWithExceed> getAll() {
         int userId = getUserId();
         log.info("getAll for user {}", userId);
-        return service.getAll(userId);
+        return MealsUtil.getWithExceeded(service.getAll(userId), AuthorizedUser.getCaloriesPerDay());
     }
 
     public List<MealWithExceed> getBetween(LocalDate startDate, LocalTime startTime,

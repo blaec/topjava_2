@@ -30,14 +30,19 @@ public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
     //    private MealRepository repository;
+    private ConfigurableApplicationContext appCtx;
     private MealRestController controller;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         controller = appCtx.getBean(MealRestController.class);
-//        repository = new InMemoryMealRepositoryImpl();
+    }
+
+    @Override
+    public void destroy() {
+        appCtx.close();
     }
 
     @Override
@@ -45,19 +50,17 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         if (request.getParameterMap().containsKey("AddMeal")) {
-            String id = request.getParameter("id");
-
-            Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
+            Meal meal = new Meal(
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
                     Integer.valueOf(request.getParameter("calories")));
 
-            if (meal.isNew()) {
+            if (request.getParameter("id").isEmpty()) {
                 log.info("Create {}", meal);
-                controller.save(meal);
+                controller.create(meal);
             } else {
                 log.info("Update {}", meal);
-                controller.update(meal, meal.getId());
+                controller.update(meal, getId(request));
             }
             response.sendRedirect("meals");
         } else if (request.getParameterMap().containsKey("FilterMeals")) {
@@ -101,8 +104,7 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                request.setAttribute("meals",
-                        MealsUtil.getWithExceeded(controller.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                request.setAttribute("meals", controller.getAll());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
