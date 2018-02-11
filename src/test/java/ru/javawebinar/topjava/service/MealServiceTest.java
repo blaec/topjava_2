@@ -111,4 +111,12 @@ public class MealServiceTest {
         updated.setCalories(330);
         service.update(updated, ADMIN_ID);
     }
+
+    @Test(expected = Exception.class)
+    public void createWithSameDateTime() {
+        Meal newMeal = new Meal(null, LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "New",  1555);
+        Meal created = service.create(newMeal, USER_ID);
+        newMeal.setId(created.getId());
+        MealTestData.assertMatch(service.getAll(USER_ID), created, USER_MEAL6, USER_MEAL5, USER_MEAL4, USER_MEAL3, USER_MEAL2, USER_MEAL1);
+    }
 }
