@@ -3,18 +3,18 @@ package ru.javawebinar.topjava;
 import ru.javawebinar.topjava.repository.datajpa.DataJpaMealRepositoryImpl;
 
 public class Profiles {
-    private static final String
+    public static final String
             JDBC = "jdbc",
             JPA = "jpa",
             DATAJPA = "datajpa";
 
-    private static final String REPOSITORY_IMPLEMENTATION = DATAJPA;
+    public static final String REPOSITORY_IMPLEMENTATION = DATAJPA;
 
     public static String getActiveRepoProfile() {
         return REPOSITORY_IMPLEMENTATION;
     }
 
-    private static final String
+    public static final String
             POSTGRES_DB = "postgres",
             HSQL_DB = "hsqldb";
 
