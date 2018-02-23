@@ -25,7 +25,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     }
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     @Test
     public void create() throws Exception {
