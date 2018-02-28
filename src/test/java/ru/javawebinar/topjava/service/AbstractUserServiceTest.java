@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.*;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
@@ -14,7 +16,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assume.assumeThat;
 import static ru.javawebinar.topjava.UserTestData.*;
 
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
