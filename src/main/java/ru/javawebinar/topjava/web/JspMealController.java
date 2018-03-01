@@ -37,23 +37,23 @@ public class JspMealController {
         return "meals";
     }
 
-    @GetMapping(value = "/deleteMeal")
+    @GetMapping(value = "/delete")
     public String delete(HttpServletRequest request) {
         int id = getId(request);
         service.delete(id, AuthorizedUser.id());
         return "redirect:meals";
     }
 
-    @GetMapping(value = {"/createMeal","/updateMeal"})
+    @GetMapping(value = {"/create","/update"})
     public String modify(HttpServletRequest request, Model model) {
-        final Meal meal = "/createMeal".equals(request.getServletPath()) ?
+        final Meal meal = "/create".equals(request.getServletPath()) ?
                 new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
                 service.get(getId(request), AuthorizedUser.id());
         model.addAttribute("meal", meal);
         return "mealForm";
     }
 
-    @PostMapping(value = "/modifyMeals")
+    @PostMapping(value = "/add")
     public String addChanges(HttpServletRequest request) {
         int userId = AuthorizedUser.id();
         Meal meal = new Meal(
@@ -64,7 +64,8 @@ public class JspMealController {
         if (request.getParameter("id").isEmpty()) {
             service.create(meal, userId);
         } else {
-            //TODO update's not working - constraint violation???
+            // TODO update's not working - constraint violation???
+            // passes when this contraint is removed (initDB commented line meals_unique_user_datetime_idx)
             service.update(meal, userId);
         }
         return "redirect:meals";
