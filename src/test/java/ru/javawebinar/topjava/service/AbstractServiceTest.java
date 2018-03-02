@@ -60,8 +60,9 @@ abstract public class AbstractServiceTest {
     }
 
     public boolean isJDBC() {
-        return Arrays.stream(environment.getActiveProfiles())
-                .filter(JDBC::equals)
-                .findFirst().orElse(null) != null;
+        return environment.acceptsProfiles(JDBC);
+//        return Arrays.stream(environment.getActiveProfiles())
+//                .filter(JDBC::equals)
+//                .findFirst().orElse(null) != null;
     }
 }
