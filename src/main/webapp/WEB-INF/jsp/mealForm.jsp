@@ -3,18 +3,15 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
-<head>
-    <jsp:include page="fragments/headTag.jsp"/>
-</head>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
-    <jsp:include page="fragments/bodyHeader.jsp"/>
-<section>
-    <h3><spring:message code="meal.title"/></h3>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 
-    <h2>${param.action == 'create' ? 'Create meal' : 'Edit meal'}</h2>
-    <hr>
+<section>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
-    <form method="post" action="add">
+    <h3><spring:message code="${meal.isNew() ? 'meal.add' : 'meal.edit'}"/></h3>
+    <hr>
+    <form method="post" action="meals">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt><spring:message code="meal.dateTime"/></dt>
@@ -28,10 +25,10 @@
             <dt><spring:message code="meal.calories"/>:</dt>
             <dd><input type="number" value="${meal.calories}" name="calories" required></dd>
         </dl>
-        <button type="submit"><spring:message code="meal.save"/></button>
-        <button onclick="window.history.back()" type="button"><spring:message code="meal.cancel"/></button>
+        <button type="submit"><spring:message code="common.save"/></button>
+        <button onclick="window.history.back()" type="button"><spring:message code="common.cancel"/></button>
     </form>
 </section>
-    <jsp:include page="fragments/footer.jsp"/>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
