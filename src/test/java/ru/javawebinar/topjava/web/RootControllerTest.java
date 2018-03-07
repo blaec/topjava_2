@@ -1,8 +1,6 @@
 package ru.javawebinar.topjava.web;
 
-import com.sun.xml.internal.ws.api.pipe.ContentType;
 import org.junit.Test;
-import org.springframework.http.MediaType;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

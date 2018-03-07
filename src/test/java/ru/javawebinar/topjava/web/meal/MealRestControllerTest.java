@@ -6,23 +6,19 @@ import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.Month;
 
-import static java.time.LocalDateTime.of;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.MealTestData.getCreated;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 public class MealRestControllerTest extends AbstractControllerTest {
 
@@ -55,6 +51,17 @@ public class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void testGetBetween() throws Exception {
+        LocalDateTime startDateTime = LocalDateTime.of(2015, Month.MAY, 30, 9, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2015, Month.MAY, 31,11,0);
+        String url = REST_URL + "filter?startDateTime=" + startDateTime + "&endDateTime=" + endDateTime;
+
+        TestUtil.print(mockMvc.perform(get(url))
+                .andExpect(status().isOk())
+                .andExpect(MealTestData.contentJsonWithExceed(new MealWithExceed(MEAL4,true), new MealWithExceed(MEAL1, false))));
+    }
+
+    @Test
     public void testCreate() throws Exception {
         Meal expected = getCreated();
         ResultActions action = mockMvc.perform(post(REST_URL)
@@ -78,18 +85,5 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk());
 
         assertMatch(mealService.get(MEAL1_ID, USER_ID), updated);
-    }
-
-    @Test
-    public void testGetBetween() throws Exception {
-        LocalDate startDate = LocalDate.of(2015, Month.MAY, 30);
-        LocalDate endDate = LocalDate.of(2015, Month.MAY, 30);
-        LocalTime startTime = LocalTime.of(9, 0);
-        LocalTime endTime = LocalTime.of(11, 0);
-
-        TestUtil.print(mockMvc.perform(get(REST_URL + startDate + "/" + endDate + "/" + startTime + "/" + endTime))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MealTestData.contentJson(MEAL1)));
     }
 }
