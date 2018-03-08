@@ -58,7 +58,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
         TestUtil.print(mockMvc.perform(get(url))
                 .andExpect(status().isOk())
-                .andExpect(MealTestData.contentJsonWithExceed(new MealWithExceed(MEAL4,true), new MealWithExceed(MEAL1, false))));
+                .andExpect(MealTestData.contentJson(new MealWithExceed(MEAL4,true), new MealWithExceed(MEAL1, false))));
     }
 
     @Test
