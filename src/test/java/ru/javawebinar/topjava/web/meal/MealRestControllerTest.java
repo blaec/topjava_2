@@ -10,7 +10,9 @@ import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -52,9 +54,9 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetBetween() throws Exception {
-        LocalDateTime startDateTime = LocalDateTime.of(2015, Month.MAY, 30, 9, 0);
-        LocalDateTime endDateTime = LocalDateTime.of(2015, Month.MAY, 31,11,0);
-        String url = REST_URL + "filter?startDateTime=" + startDateTime + "&endDateTime=" + endDateTime;
+        LocalDate startDate = LocalDate.of(2015, Month.MAY, 30);
+        LocalTime endTime = LocalTime.of(11,0);
+        String url = REST_URL + "filter?startDate=" + startDate + "&endTime=" + endTime;
 
         TestUtil.print(mockMvc.perform(get(url))
                 .andExpect(status().isOk())
