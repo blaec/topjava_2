@@ -1,0 +1,42 @@
+package ru.javawebinar.topjava.web.meal;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealWithExceed;
+
+import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@RestController
+@RequestMapping("/ajax/profile/meals")
+public class MealAjaxController extends AbstractMealController{
+
+    @Override
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") int id) {
+        super.delete(id);
+    }
+
+    @Override
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MealWithExceed> getAll() {
+        return super.getAll();
+    }
+
+    @PostMapping
+    public void createOrUpdate(@RequestParam("id") Integer id,
+                               @RequestParam("dateTime") String dateTime,
+                               @RequestParam("description") String description,
+                               @RequestParam("calories") Integer calories) {
+        LocalDateTime ldt = LocalDateTime.parse(dateTime);
+        if (id == null) {
+            Meal meal = new Meal(ldt, description, calories);
+            super.create(meal);
+        } else {
+            Meal meal = new Meal(id, ldt, description, calories);
+            super.update(meal, id);
+        }
+    }
+}

@@ -418,8 +418,7 @@
                 </con:representation>
                 <con:request name="MealsGet" id="c4579a18-d961-4d09-8709-b99659a1c64c" mediaType="application/json">
                     <con:settings>
-                        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/>
-                        </con:setting>
+                        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
                     </con:settings>
                     <con:endpoint>http://localhost:8080</con:endpoint>
                     <con:request/>
@@ -463,8 +462,7 @@
                 </con:representation>
                 <con:request name="MealsСreate" id="2bb0c527-598d-41c3-b435-76ebe5b8566d" mediaType="application/json" postQueryString="false">
                     <con:settings>
-                        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/>
-                        </con:setting>
+                        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
                         <con:setting id="com.eviware.soapui.impl.support.AbstractHttpRequest@follow-redirects">true
                         </con:setting>
                     </con:settings>
