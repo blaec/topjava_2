@@ -6,7 +6,9 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -39,4 +41,13 @@ public class MealAjaxController extends AbstractMealController{
             super.update(meal, id);
         }
     }
+
+//    @Override
+//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<MealWithExceed> getBetween(@RequestParam("startDate") LocalDate startDate,
+//                                           @RequestParam("startTime") LocalTime startTime,
+//                                           @RequestParam("endDate") LocalDate endDate,
+//                                           @RequestParam("endTime") LocalTime endTime) {
+//        return super.getBetween(startDate, startTime, endDate, endTime);
+//    }
 }

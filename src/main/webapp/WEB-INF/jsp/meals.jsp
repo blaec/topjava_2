@@ -14,34 +14,44 @@
     <div class="container">
         <h3><spring:message code="meal.title"/></h3>
 
-        <form method="post" action="meals/filter">
-            <dl>
-                <dt><spring:message code="meal.startDate"/>:</dt>
-                <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.endDate"/>:</dt>
-                <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.startTime"/>:</dt>
-                <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
-            </dl>
-            <dl>
-                <dt><spring:message code="meal.endTime"/>:</dt>
-                <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
-            </dl>
-            <button class="btn btn-primary" type="submit">
-                <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-                <spring:message code="meal.filter"/>
-            </button>
+        <form class="col-xs-7" id="filterForm">
+            <div class="well">
+                <div class="row">
+                    <label class="col-xs-2 text-right"><spring:message code="meal.startDate"/>:</label>
+                    <div class="col-xs-4">
+                        <input class="form-control" id="startDate" type="date" name="startDate" value="${param.startDate}">
+                    </div>
+                    <label class="col-xs-2 text-right"><spring:message code="meal.startTime"/>:</label>
+                    <div class="col-xs-3">
+                        <input class="form-control" id="startTime" type="time" name="startTime" value="${param.startTime}">
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-xs-2 text-right"><spring:message code="meal.endDate"/>:</label>
+                    <div class="col-xs-4">
+                        <input class="form-control" id="endDate" type="date" name="endDate" value="${param.endDate}">
+                    </div>
+                    <label class="col-xs-2 text-right"><spring:message code="meal.endTime"/>:</label>
+                    <div class="col-xs-3">
+                        <input class="form-control" id="endTime" type="time" name="endTime" value="${param.endTime}">
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-danger" onclick="clearFilter()">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+                <a class="btn btn-primary" onclick="filter()">
+                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                </a>
+            </div>
         </form>
-        <hr>
-        <a class="btn btn-primary" onclick="add()">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            <spring:message code="meal.add"/>
-        </a>
-        <hr>
+        <div class="col-xs-12">
+            <a class="btn btn-primary" onclick="add()">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <spring:message code="meal.add"/>
+            </a>
+        </div>
 
         <table class="table table-striped display" id="datatable">
             <thead>
@@ -56,7 +66,7 @@
             <c:forEach items="${meals}" var="meal">
                 <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
                 <tr class="${meal.exceed ? 'exceeded' : 'normal'}" id="${meal.id}">
-                    <td>${fn:formatDateTime(meal.dateTime)}</td>
+                    <td id="date_time">${fn:formatDateTime(meal.dateTime)}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td><a href="meals/update?id=${meal.id}">
