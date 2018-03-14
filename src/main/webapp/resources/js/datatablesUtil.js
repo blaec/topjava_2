@@ -1,15 +1,4 @@
 function makeEditable() {
-    $(".delete").click(function () {
-        // https://stackoverflow.com/questions/11568722/more-efficient-way-to-do-parent-parent-parent-etc-in-jquery/11568750#11568750
-        // deleteRow($(this).parent().parent().attr("id"));
-        deleteRow($(this).closest('tr').attr("id"));
-    });
-
-    $("#detailsForm").submit(function () {
-        save();
-        return false;
-    });
-
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
     });

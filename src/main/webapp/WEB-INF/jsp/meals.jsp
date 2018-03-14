@@ -14,44 +14,54 @@
     <div class="container">
         <h3><spring:message code="meal.title"/></h3>
 
-        <form class="col-xs-7" id="filterForm">
-            <div class="well">
-                <div class="row">
-                    <label class="col-xs-2 text-right"><spring:message code="meal.startDate"/>:</label>
-                    <div class="col-xs-4">
-                        <input class="form-control" id="startDate" type="date" name="startDate" value="${param.startDate}">
+        <div class="row">
+            <div class="col-xs-7">
+                <div class="panel panel-default panel-primary">
+                    <div class="panel-heading">Meals filter</div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="filterForm">
+                            <div class="form-group">
+                                <label class="col-xs-2 text-right"><spring:message code="meal.startDate"/>:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" id="startDate" type="date" name="startDate"
+                                           value="${param.startDate}">
+                                </div>
+                                <label class="col-xs-2 text-right"><spring:message code="meal.startTime"/>:</label>
+                                <div class="col-xs-3">
+                                    <input class="form-control" id="startTime" type="time" name="startTime"
+                                           value="${param.startTime}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-2 text-right"><spring:message code="meal.endDate"/>:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" id="endDate" type="date" name="endDate"
+                                           value="${param.endDate}">
+                                </div>
+                                <label class="col-xs-2 text-right"><spring:message code="meal.endTime"/>:</label>
+                                <div class="col-xs-3">
+                                    <input class="form-control" id="endTime" type="time" name="endTime"
+                                           value="${param.endTime}">
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <label class="col-xs-2 text-right"><spring:message code="meal.startTime"/>:</label>
-                    <div class="col-xs-3">
-                        <input class="form-control" id="startTime" type="time" name="startTime" value="${param.startTime}">
-                    </div>
-                </div>
-                <div class="row">
-                    <label class="col-xs-2 text-right"><spring:message code="meal.endDate"/>:</label>
-                    <div class="col-xs-4">
-                        <input class="form-control" id="endDate" type="date" name="endDate" value="${param.endDate}">
-                    </div>
-                    <label class="col-xs-2 text-right"><spring:message code="meal.endTime"/>:</label>
-                    <div class="col-xs-3">
-                        <input class="form-control" id="endTime" type="time" name="endTime" value="${param.endTime}">
+
+                    <div class="panel-footer text-right">
+                        <a class="btn btn-danger" onclick="clearFilter()">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </a>
+                        <a class="btn btn-primary" onclick="updateTable()">
+                            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="pull-right">
-                <a class="btn btn-danger" onclick="clearFilter()">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                </a>
-                <a class="btn btn-primary" onclick="updateTable()">
-                    <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-                </a>
-            </div>
-        </form>
-        <div class="col-xs-12">
-            <a class="btn btn-primary" onclick="add()">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                <spring:message code="meal.add"/>
-            </a>
         </div>
+        <a class="btn btn-primary" onclick="add()">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <spring:message code="meal.add"/>
+        </a>
 
         <table class="table table-striped display" id="datatable">
             <thead>
@@ -65,14 +75,14 @@
             </thead>
             <c:forEach items="${meals}" var="meal">
                 <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
-                <tr class="${meal.exceed ? 'exceeded' : 'normal'}" id="${meal.id}">
+                <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                     <td id="date_time">${fn:formatDateTime(meal.dateTime)}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td><a href="meals/update?id=${meal.id}">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                     </a></td>
-                    <td><a class="delete">
+                    <td><a onclick="deleteRow(${meal.id})">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </a></td>
                 </tr>
@@ -124,7 +134,7 @@
 
                     <div class="form-group">
                         <div class="col-xs-offset-3 col-xs-9">
-                            <button type="submit" class="btn btn-primary">
+                            <button onclick="save()" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                             </button>
                         </div>
