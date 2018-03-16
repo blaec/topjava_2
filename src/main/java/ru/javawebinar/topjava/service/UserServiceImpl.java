@@ -72,14 +72,14 @@ public class UserServiceImpl implements UserService {
         Assert.notNull(user, "user must not be null");
         checkNotFoundWithId(repository.save(user), user.getId());
     }
-
-    @CacheEvict(value = "users", allEntries = true)
-    @Transactional
-    @Override
-    public void update(UserTo userTo) {
-        User user = get(userTo.getId());
-        repository.save(UserUtil.updateFromTo(user, userTo));
-    }
+//
+//    @CacheEvict(value = "users", allEntries = true)
+//    @Transactional
+//    @Override
+//    public void update(UserTo userTo) {
+//        User user = get(userTo.getId());
+//        repository.save(UserUtil.updateFromTo(user, userTo));
+//    }
 
 
     @CacheEvict(value = "users", allEntries = true)
