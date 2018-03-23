@@ -14,27 +14,52 @@ function clearFilter() {
     $.get(ajaxUrl, updateTableByData);
 }
 
+
 $(function () {
     datatableApi = $("#datatable").DataTable({
+        "ajax": {
+            "url": ajaxUrl,
+            "dataSrc": ""
+        },
         "paging": false,
         "info": true,
         "columns": [
             {
-                "data": "dateTime"
+                "data": "dateTime",
+                "render": function (data, type, row) {
+                    if (type === "display") {
+                        return data.replace('T', ' ');
+                    }
+                    return data;
+                }
             },
             {
-                "data": "description"
+                "data": "description",
+                "render": function (data, type, row) {
+                    if (type === "display") {
+                        return data;
+                    }
+                    return data;
+                }
             },
             {
-                "data": "calories"
+                "data": "calories",
+                "render": function (data, type, row) {
+                    if (type === "display") {
+                        return parseInt(data);
+                    }
+                    return data;
+                }
             },
             {
-                "defaultContent": "Edit",
-                "orderable": false
+                "orderable": false,
+                "defaultContent": "",
+                "render": renderEditBtn
             },
             {
+                "orderable": false,
                 "defaultContent": "Delete",
-                "orderable": false
+                "render": renderDeleteBtn
             }
         ],
         "order": [
@@ -42,7 +67,10 @@ $(function () {
                 0,
                 "desc"
             ]
-        ]
+        ],
+        "createdRow": function (row, data, dataIndex) {
+            $(row).addClass(!data.exceed ? "normal" : "exceeded")
+        },
+        "initComplete": makeEditable()
     });
-    makeEditable();
 });

@@ -11,13 +11,13 @@ function makeEditable() {
 }
 
 function add() {
-    // $("#modalTitle").html(i18n["addTitle"]);
+    $("#modalTitle").html(i18n["addTitle"]);
     form.find(":input").val("");
     $("#editRow").modal();
 }
 
 function updateRow(id) {
-    // $("#modalTitle").html(i18n["editTitle"]);
+    $("#modalTitle").html(i18n["editTitle"]);
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             form.find("input[name='" + key + "']").val(value);
@@ -74,8 +74,7 @@ function successNoty(key) {
 function failNoty(jqXHR) {
     closeNoty();0
     failedNote = new Noty({
-        // text: "<span class='glyphicon glyphicon-exclamation-sign'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status + (jqXHR.responseJSON ? "<br>" + jqXHR.responseJSON : ""),
-        text: "<span class='glyphicon glyphicon-exclamation-sign'></span> &nbsp;Error status: " + jqXHR.status + (jqXHR.responseJSON ? "<br>" + jqXHR.responseJSON : ""),
+        text: "<span class='glyphicon glyphicon-exclamation-sign'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status + (jqXHR.responseJSON ? "<br>" + jqXHR.responseJSON : ""),
         type: "error",
         layout: "bottomRight"
     }).show();
