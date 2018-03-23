@@ -1,13 +1,22 @@
 package ru.javawebinar.topjava.to;
 
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class MealTo extends BaseTo {
+    @NotBlank
+    @Size(min = 2, max = 120)
     private String description;
 
+    @Range(min = 10, max = 5000, message = "must not be within range of 10 to 5,000")
     private Integer calories;
 
     // TODO should be LocalDateTime, need to find conversion
+    @NotNull
     private String dateTime;
 
     public MealTo(Integer id, String description, Integer calories, String dateTime) {

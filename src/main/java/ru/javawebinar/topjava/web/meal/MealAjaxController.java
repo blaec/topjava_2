@@ -1,15 +1,21 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
+import static ru.javawebinar.topjava.util.ValidationUtil.getStringResponseEntity;
 
 @RestController
 @RequestMapping(value = "/ajax/profile/meals")
@@ -34,13 +40,18 @@ public class MealAjaxController extends AbstractMealController {
     }
 
     @PostMapping
-    public void createOrUpdate(MealTo mealTo) {
+    public ResponseEntity<String> createOrUpdate(@Valid MealTo mealTo, BindingResult result) {
+        ResponseEntity<String> joiner = getStringResponseEntity(result);
+        if (joiner != null) return joiner;
+
         if (mealTo.isNew()) {
             super.create(MealsUtil.createNewFromTo(mealTo));
         } else {
             super.update(mealTo, mealTo.getId());
         }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @Override
     @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
