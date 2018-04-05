@@ -37,10 +37,7 @@ public class MealAjaxController extends AbstractMealController {
     }
 
     @PostMapping
-    public void createOrUpdate(@Valid Meal meal, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new NotFoundException(defaultErrorMessage(result));
-        }
+    public void createOrUpdate(@Valid Meal meal) {
         if (meal.isNew()) {
             super.create(meal);
         } else {

@@ -36,10 +36,7 @@ public class AdminAjaxController extends AbstractUserController {
     }
 
     @PostMapping
-    public void createOrUpdate(@Valid UserTo userTo, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new NotFoundException(defaultErrorMessage(result));
-        }
+    public void createOrUpdate(@Valid UserTo userTo) {
         if (userTo.isNew()) {
             super.create(UserUtil.createNewFromTo(userTo));
         } else {
